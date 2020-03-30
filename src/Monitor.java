@@ -11,14 +11,20 @@ public class Monitor
      * Data members
      * ------------
      */
-
-
+    //This array will keep track of the chopsticks in use.Therefore, false means they are available
+    private boolean[] chopsticks;
+    //this boolean represents someone talking at the moment. Therefore, false means no one is speaking.
+    private boolean talking=false;
     /**
      * Constructor
      */
     public Monitor(int piNumberOfPhilosophers)
     {
         // TODO: set appropriate number of chopsticks based on the # of philosophers
+        chopsticks=new boolean[piNumberOfPhilosophers];
+        for (int i=0;i<piNumberOfPhilosophers;i++){
+            chopsticks[i]=false;
+        }
     }
 
     /*
@@ -34,6 +40,22 @@ public class Monitor
     public synchronized void pickUp(final int piTID)
     {
         // ...
+        if (piTID!=chopsticks.length && (!chopsticks[piTID-1] && !chopsticks[piTID])){
+            chopsticks[piTID-1]=true;
+            chopsticks[piTID]=true;
+        }
+        else if (!chopsticks[0] && !chopsticks[piTID-1]){
+            chopsticks[0]=true;
+            chopsticks[piTID-1]=true;
+        }
+        else{
+            try {
+                wait();
+            }
+            catch (InterruptedException e){
+                System.err.println(e.getMessage());
+            }
+        }
     }
 
     /**
@@ -43,6 +65,15 @@ public class Monitor
     public synchronized void putDown(final int piTID)
     {
         // ...
+        if (piTID!=chopsticks.length && (chopsticks[piTID-1] && chopsticks[piTID])){
+            chopsticks[piTID-1]=false;
+            chopsticks[piTID]=false;
+        }
+        else if (chopsticks[0] && chopsticks[piTID-1]){
+            chopsticks[0]=false;
+            chopsticks[piTID-1]=false;
+        }
+        notifyAll();
     }
 
     /**
@@ -52,6 +83,17 @@ public class Monitor
     public synchronized void requestTalk()
     {
         // ...
+        if (talking){
+            try {
+                wait();
+            }
+            catch (InterruptedException e){
+                System.err.println(e.getMessage());
+            }
+        }
+        else {
+            talking=true;
+        }
     }
 
     /**
@@ -61,6 +103,7 @@ public class Monitor
     public synchronized void endTalk()
     {
         // ...
+        talking=false;
     }
 }
 
