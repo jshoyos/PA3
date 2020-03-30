@@ -59,7 +59,8 @@ public class Monitor
      */
     public synchronized void putDown(final int piTID)
     {
-        // ...
+        //this is to release the chopsticks. it does not need a check as it won't change anything if you release something that you don't have
+        //we also notify all the philosophers that some chopsticks have been released, maybe one of them can grab them
         chopsticks[piTID%chopsticks.length]=false;
         chopsticks[piTID-1]=false;
         notifyAll();
@@ -71,8 +72,9 @@ public class Monitor
      */
     public synchronized void requestTalk()
     {
-        // ...
-        if (talking){
+        //we only need to verify no one is already talking other than that the philosopher can talk.
+        //If no one is talking we can allow the philosopher to speak and tell every one you will be speaking
+        while (talking){
             try {
                 wait();
             }
@@ -81,9 +83,7 @@ public class Monitor
                 System.exit(1);
             }
         }
-        else {
-            talking=true;
-        }
+        talking=true;
     }
 
     /**
@@ -92,8 +92,10 @@ public class Monitor
      */
     public synchronized void endTalk()
     {
-        // ...
+        //No need to check if someone is talking as we only need to tell everyone that we are done talking
+        //and grant the permission to talk to others
         talking=false;
+        notifyAll();
     }
 }
 

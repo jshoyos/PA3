@@ -25,13 +25,15 @@ public class Philosopher extends BaseThread
     {
         try
         {
-            // ...
+            //Very similar method  to the think method
+            //This method only prints the intention to begin to eat
+            //calls the eat method
+            //informs that the philosopher is done eating
             System.out.println("Philosopher " + this.getTID() + " has started eating");
             Thread.yield();
             sleep((long)(Math.random() * TIME_TO_WASTE));
             Thread.yield();
             System.out.println("Philosopher " + this.getTID() + " is done eating");
-            // ...
         }
         catch(InterruptedException e)
         {
@@ -51,7 +53,8 @@ public class Philosopher extends BaseThread
      */
     public void think()
     {
-        // ...
+        //Only informs that the x philosopher will begin to talk and inform when he is done thinking
+        //as well as simulating the speech
         try{
 
             System.out.println("Philosopher " + this.getTID() + " has started thinking");
@@ -77,13 +80,12 @@ public class Philosopher extends BaseThread
      */
     public void talk()
     {
-        // ...
+        // we are simulating the talk. This method only calls the method to randomize the speech, and informs that someone will speak and/or is done speaking
         System.out.println("Philosopher " + this.getTID() + " has started saying something");
         Thread.yield();
         saySomething();
         Thread.yield();
         System.out.println("Philosopher " + this.getTID() + " is done saying something");
-        // ...
     }
 
     /**
