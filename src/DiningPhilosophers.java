@@ -41,16 +41,36 @@ public class DiningPhilosophers
     {
         try
         {
-            /*
-             * TODO:
-             * Should be settable from the command line
-             * or the default if no arguments supplied.
-             */
             int iPhilosophers = DEFAULT_NUMBER_OF_PHILOSOPHERS;
 
-            // Make the monitor aware of how many philosophers there are
-            soMonitor = new Monitor(iPhilosophers);
+            // When no arguments are given it will take the default value of 4
+            if (argv.length==0) {
+                soMonitor = new Monitor(iPhilosophers);
+            }
+            else if (argv.length==1){
+                //if there is one argument passed we verify its an integer first and then we check that its positive as well
+                try{
+                    int arg=Integer.parseInt(argv[0]);
+                    if (arg<0){
+                        System.err.println("\"" +argv[0]+"\" is not a positive decimal integer \n Usage: java DiningPhilosopher [NUMBER_OF_PHILOSOPHERS]");
+                        System.exit(1);
+                    }
+                    else{
+                        iPhilosophers=arg;
+                        soMonitor=new Monitor(iPhilosophers);
+                    }
+                }
+                catch (NumberFormatException e){
+                    System.err.println("\"" +argv[0]+"\" is not a positive decimal integer \n Usage: java DiningPhilosopher [NUMBER_OF_PHILOSOPHERS]");
+                    System.exit(1);
+                }
 
+            }
+            else{
+                //if there are more than one argument this is automatically wrong as we only expect one argument
+                System.err.println("\"" +argv[0]+"\" is not a positive decimal integer \n Usage: java DiningPhilosopher [NUMBER_OF_PHILOSOPHERS]");
+                System.exit(1);
+            }
             // Space for all the philosophers
             Philosopher aoPhilosophers[] = new Philosopher[iPhilosophers];
 

@@ -54,6 +54,7 @@ public class Monitor
             }
             catch (InterruptedException e){
                 System.err.println(e.getMessage());
+                System.exit(1);
             }
         }
     }
@@ -89,6 +90,7 @@ public class Monitor
             }
             catch (InterruptedException e){
                 System.err.println(e.getMessage());
+                System.exit(1);
             }
         }
         else {

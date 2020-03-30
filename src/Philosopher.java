@@ -102,17 +102,14 @@ public class Philosopher extends BaseThread
             think();
 
             /*
-             * TODO:
-             * A decision is made at random whether this particular
-             * philosopher is about to say something terribly useful.
+            The philosopher will speak if the random number selected is an even number. This makes the speaking random
              */
-            if(true == false)
+            int randomNumber=(int)(Math.random()*10);
+            if(randomNumber%2==0)
             {
-                // Some monitor ops down here...
                 DiningPhilosophers.soMonitor.requestTalk();
                 talk();
                 DiningPhilosophers.soMonitor.endTalk();
-                // ...
             }
 
             yield();
