@@ -40,15 +40,7 @@ public class Monitor
     public synchronized void pickUp(final int piTID)
     {
         // ...
-        if (piTID!=chopsticks.length && (!chopsticks[piTID-1] && !chopsticks[piTID])){
-            chopsticks[piTID-1]=true;
-            chopsticks[piTID]=true;
-        }
-        else if (!chopsticks[0] && !chopsticks[piTID-1]){
-            chopsticks[0]=true;
-            chopsticks[piTID-1]=true;
-        }
-        else{
+        while(chopsticks[piTID%chopsticks.length] || chopsticks[piTID-1]){
             try {
                 wait();
             }
@@ -57,6 +49,8 @@ public class Monitor
                 System.exit(1);
             }
         }
+        chopsticks[piTID-1]=true;
+        chopsticks[piTID%chopsticks.length]=true;
     }
 
     /**
@@ -66,14 +60,8 @@ public class Monitor
     public synchronized void putDown(final int piTID)
     {
         // ...
-        if (piTID!=chopsticks.length && (chopsticks[piTID-1] && chopsticks[piTID])){
-            chopsticks[piTID-1]=false;
-            chopsticks[piTID]=false;
-        }
-        else if (chopsticks[0] && chopsticks[piTID-1]){
-            chopsticks[0]=false;
-            chopsticks[piTID-1]=false;
-        }
+        chopsticks[piTID%chopsticks.length]=false;
+        chopsticks[piTID-1]=false;
         notifyAll();
     }
 
